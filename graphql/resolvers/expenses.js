@@ -23,7 +23,16 @@ module.exports = {
       }
 
       const trip = await Trip.findById(tripId);
-      const newExpense = new Expense({name, cost, category, currency, rate, username: user.username, paidBy, createdAt: new Date().toISOString()})
+      const newExpense = new Expense({
+        name,
+        cost,
+        category,
+        currency,
+        rate,
+        username: user.username,
+        paidBy,
+        createdAt: new Date().toISOString(),
+      });
 
       trip.expenses.unshift(newExpense);
       await trip.save();
@@ -39,10 +48,14 @@ module.exports = {
         await trip.save();
         return trip;
       } else {
-        throw new UserInputError("not found");
+        throw new UserInputError("not found!!");
       }
     },
-    modifyExpense: async (_, { tripId, name, cost, category, currency, rate, expenseId, paidBy }, context) => {
+    modifyExpense: async (
+      _,
+      { tripId, name, cost, category, currency, rate, expenseId, paidBy },
+      context
+    ) => {
       const user = checkAuth(context);
       const trip = await Trip.findById(tripId);
       if (trip) {
@@ -51,8 +64,8 @@ module.exports = {
         trip.expenses[index].name = name;
         trip.expenses[index].cost = cost;
         trip.expenses[index].category = category;
-        trip.expenses[index].paidBy = paidBy
-                //trip.expenses[index].currency = currency;
+        trip.expenses[index].paidBy = paidBy;
+        //trip.expenses[index].currency = currency;
         //trip.expenses[index].rate = rate;
 
         await trip.save();
